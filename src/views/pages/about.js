@@ -1,4 +1,4 @@
-//templating pain
+//David Montaño Tamayo || Daniela Olarte Borja
 
 let About = {
     render : async () => {

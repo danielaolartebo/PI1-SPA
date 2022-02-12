@@ -1,3 +1,5 @@
+//David Montaño Tamayo || Daniela Olarte Borja
+
 let Register = {
 
     render: async () => {

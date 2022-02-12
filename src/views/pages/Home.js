@@ -1,3 +1,5 @@
+//David Montaño Tamayo || Daniela Olarte Borja
+
 let getPostsList = async () => {
     const options = {
        method: 'GET',

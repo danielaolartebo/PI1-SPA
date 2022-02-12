@@ -1,3 +1,5 @@
+//David Montaño Tamayo || Daniela Olarte Borja
+
 let Error404 = {
 
     render : async () => {

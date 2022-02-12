@@ -1,3 +1,5 @@
+//David Montaño Tamayo || Daniela Olarte Borja
+
 import Utils        from './../../services/Utils.js'
 
 let getPost = async (id) => {

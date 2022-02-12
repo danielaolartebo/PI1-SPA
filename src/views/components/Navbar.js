@@ -1,3 +1,5 @@
+//David Montaño Tamayo || Daniela Olarte Borja
+
 let Navbar = {
     render: async () => {
         let view =  `

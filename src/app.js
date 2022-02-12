@@ -1,4 +1,4 @@
-//El rauting papaaaaaaaa
+//David Montaño Tamayo || Daniela Olarte Borja
 
 import Home from './views/pages/Home.js'
 import About from './views/pages/About.js'
@@ -15,9 +15,9 @@ import Utils from './services/Utils.js'
 
 const routes={
 
-    '/' : Home 
-    , '/about'  :About 
-    , '/p/:id'  :PostShow
+    '/'             : Home 
+    , '/about'      :About 
+    , '/p/:id'      :PostShow
     , '/register'   :Register
 
 };
