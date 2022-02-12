@@ -29,6 +29,10 @@ To run the web app you should follow these steps:
 
 5️⃣ Run the project on the IDE 
 
+## **Sources**
+
+Check [tutorial](https://dev.to/rishavs/making-a-single-page-app-in-ye-good-olde-js-es6-3eng) for extra help
+
 ## **Authors** ✒️
 
 <p align="left">
