@@ -1,3 +1,4 @@
+"use strict";
 //David Montaño Tamayo || Daniela Olarte Borja
 
 //Home
@@ -172,7 +173,7 @@ let Navbar = {
              <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="container">
                     <div class="navbar-brand">
-                        <a class="navbar-item" href="/#/">
+                        <a class="navbar-item" href="#/">
                             <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
                         </a>
                         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -183,20 +184,20 @@ let Navbar = {
                     </div>
                     <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
                         <div class="navbar-start">
-                            <a class="navbar-item" href="/#/">
+                            <a class="navbar-item" href="#/">
                                 Home
                             </a>
-                            <a class="navbar-item" href="/#/about">
+                            <a class="navbar-item" href="#/about">
                                 About
                             </a>
-                            <a class="navbar-item" href="/#/secret">
+                            <a class="navbar-item" href="#/secret">
                                 Secret
                             </a>
                         </div>
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <a class="button is-primary" href="/#/register">
+                                    <a class="button is-primary" href="#/register">
                                         <strong>Sign up</strong>
                                     </a>
                                     <a class="button is-light">
@@ -238,18 +239,19 @@ const Utils = {
 
     parseRequestURL : () =>{
 
-        let url     = location.hash.slice(1).toLocaleLowerCase || '/';
+        let url     = window.location.hash.slice(1).toLowerCase() || '/';
+        console.log(url);
         let r       =url.split("/")
         let request = {
 
-            resourse : null,
+            resource : null,
             id       : null,
             verb     : null
         }
 
-        request.resourse =r[1]
+        request.resource =r[1]
         request.id       =r[2]
-        request.ver      =r[3]
+        request.verb     =r[3]
 
         return request
     }
@@ -285,7 +287,7 @@ const router =async () =>{
 
     let parsedURL = (request.resource ? '/' + request.resource : '/')+(request.id ? '/:id' : '')+(request.verb ? '/' +request.verb : '')
 
-    let page = routes[parsedURL] = request.resource ? routes[parsedURL]: Error404
+    let page = routes[parsedURL] ? routes[parsedURL]: Error404
 
     content.innerHTML = await page.render();
 
