@@ -13,25 +13,39 @@ let getPostsList = async () => {
    }
 }
 
-let Home = {
-   render : async () => {
-       let posts = await getPostsList()
-       let view =  /*html*/`
-           <section class="section">
-               <h1> Home </h1>
-               <ul>
-                   ${posts.map(post => 
-                       /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
-                       ).join('\n ')
-                   }
-               </ul>
-           </section>
-       `
-       return view
-   }
-   , after_render: async () => {
-   }
+let PostsList = {
+    render : async () => {
+        let posts = await getPostsList()
+        let view =  /*html*/`
+            <section class="section">
+                <h1> <b>Articles</b> </h1><br>
+                <ul>
+                    ${posts.map(post => 
+                        /*html*/`<li>${post.title}
+                        <a href="#/p/${post.id}">
+                            <button class="button is-text is-small is-responsive">Edit</button></a></li>`
+                        ).join('\n ')
+                    }
+                </ul>
+            </section>
+        `
+        return view
+    }
+    , after_render: async () => {
+    }
+}
 
+let Home = {
+    render : async () => {
+        let view =  /*html*/`
+            <section class="section">
+                <h1> <b>Home</b> </h1>
+            </section>
+        `
+        return view
+    }
+    , after_render: async () => {
+    }
 }
 
 //About
@@ -39,7 +53,7 @@ let About = {
     render : async () => {
         let view =  /*html*/`
             <section class="section">
-                <h1> About </h1>
+                <h1> <b>About</b> </h1>
             </section>
         `
         return view
@@ -54,7 +68,7 @@ let Error404 = {
     render : async () => {
         let view =  /*html*/`
             <section class="section">
-                <h1> 404 Error </h1>
+                <h1> <b>404 Error</b> </h1>
             </section>
         `
         return view
@@ -80,10 +94,37 @@ let PostShow = {
         
         return /*html*/`
             <section class="section">
-                <h1> Post Id : ${post.id}</h1>
-                <p> Post Title : ${post.title} </p>
-                <p> Post Content : ${post.content} </p>
-                <p> Post Author : ${post.name} </p>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" id="title_input" type="text" placeholder="Enter the Title" value="${post.title}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-passport"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" id="content_input" type="text" placeholder="Enter the Content" value="${post.content}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-pen-nib"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" id="author_input" type="text" placeholder="Enter the Author" value="${post.name}">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-primary" id="update_submit_btn">
+                        Update
+                        </button>
+                    </p>
+                </div>
             </section>
         `
     }
@@ -151,6 +192,64 @@ let Register = {
     }
 }
 
+//Login
+let Login = {
+
+    render: async () => {
+        return /*html*/ `
+            <section class="section">
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" id="user_input" type="text" placeholder="Enter your User">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" id="pass_input" type="password" placeholder="Enter a Password">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" id="repeat_pass_input" type="password" placeholder="Enter the same Password again">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-primary" id="login_submit_btn">
+                        Log in
+                        </button>
+                    </p>
+                </div>
+            </section>
+        `
+    }
+    , after_render: async () => {
+        document.getElementById("login_submit_btn").addEventListener ("click",  () => {
+            let user       = document.getElementById("user_input");
+            let pass        = document.getElementById("pass_input");
+            let repeatPass  = document.getElementById("repeat_pass_input");
+            if (pass.value != repeatPass.value) {
+                alert (`The passwords dont match`)
+            } else if (user.value =='' | pass.value == '' | repeatPass == '') {
+                alert (`The fields cannot be empty`)
+            } 
+            else {
+                alert(`User ${user.value} was successfully logged in!`)
+                location.href = '#/posts'
+            }    
+        })
+    }
+}
+
 //NavBar
 let Navbar = {
     render: async () => {
@@ -185,8 +284,8 @@ let Navbar = {
                                     <a class="button is-primary" href="#/register">
                                         <strong>Sign up</strong>
                                     </a>
-                                    <a class="button is-light">
-                                        Log in
+                                    <a class="button is-light" href="#/login">
+                                        <strong>Log in</strong>
                                     </a>
                                 </div>
                             </div>
@@ -205,13 +304,11 @@ let Navbar = {
 let Bottombar = {
     render: async () => {
         let view = /*html*/`
-        <footer class="footer">
-            <div class="content has-text-centered">
-                <p>
-                    This is my foot. There are many like it, but this one is mine.
-                </p>
-            </div>
-        </footer>
+        <footer class="has-text-centered footer text-muted">
+		    <div class="container">
+			    &copy; 2022 | Daniela Olarte - David Montaño
+		    </div>
+	    </footer>
         `
         return view
     },
@@ -225,7 +322,7 @@ const Utils = {
     parseRequestURL : () =>{
 
         let url     = window.location.hash.slice(1).toLowerCase() || '/';
-        console.log(url);
+
         let r       =url.split("/")
         let request = {
 
@@ -253,7 +350,8 @@ const routes={
     , '/about'      :About 
     , '/p/:id'      :PostShow
     , '/register'   :Register
-
+    , '/login'      :Login
+    , '/posts'      :PostsList
 };
 
 const router =async () =>{
