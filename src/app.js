@@ -22,7 +22,7 @@ let PostsList = {
                 <ul>
                     ${posts.map(post => 
                         /*html*/`<li>${post.title}
-                        <a href="#/p/${post.id}">
+                        <a href="#/e/${post.id}">
                             <button class="button is-text is-small is-responsive">Edit</button></a></li>`
                         ).join('\n ')
                     }
@@ -37,9 +37,16 @@ let PostsList = {
 
 let Home = {
     render : async () => {
+        let posts = await getPostsList()
         let view =  /*html*/`
             <section class="section">
-                <h1> <b>Home</b> </h1>
+                <h1> Home </h1>
+                <ul>
+                    ${ posts.map(post => 
+                        /*html*/`<li><a href="#/p/${post.id}">${post.title}</a></li>`
+                        ).join('\n ')
+                    }
+                </ul>
             </section>
         `
         return view
@@ -53,7 +60,7 @@ let About = {
     render : async () => {
         let view =  /*html*/`
             <section class="section">
-                <h1> <b>About</b> </h1>
+                <h1>About</h1>
             </section>
         `
         return view
@@ -68,7 +75,7 @@ let Error404 = {
     render : async () => {
         let view =  /*html*/`
             <section class="section">
-                <h1> <b>404 Error</b> </h1>
+                <h1>404 Error</h1>
             </section>
         `
         return view
@@ -87,6 +94,27 @@ let getPost = async (id) => {
 }
 
 let PostShow = {
+
+    render : async () => {
+        let request = Utils.parseRequestURL()
+        let post = await getPost(request.id)
+        
+        return /*html*/`
+            <section class="section">
+                <h1> Post Id : ${post.id}</h1>
+                <p> Post Title : ${post.title} </p>
+                <p> Post Content : ${post.content} </p>
+                <p> Post Author : ${post.name} </p>
+            </section>
+        `
+    }
+    , after_render: async () => {
+    }
+}
+
+let activeUser = "";
+
+let editShow = {
 
     render : async () => {
         let request = Utils.parseRequestURL()
@@ -244,9 +272,25 @@ let Login = {
             } 
             else {
                 alert(`User ${user.value} was successfully logged in!`)
+                activeUser = user.value;
+                userActive = true;
+                updateNav();
                 location.href = '#/posts'
             }    
         })
+    }
+}
+
+let userActive = false;
+
+async function updateNav() {
+    const header = null || document.getElementById('header_container');
+    if (userActive) {
+        header.innerHTML = await NavbarUserActive.render();
+        await NavbarUserActive.after_render();
+    } else {
+        header.innerHTML = await Navbar.render();
+        await Navbar.after_render();
     }
 }
 
@@ -254,7 +298,7 @@ let Login = {
 let Navbar = {
     render: async () => {
         let view =  `
-             <nav class="navbar" role="navigation" aria-label="main navigation">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="container">
                     <div class="navbar-brand">
                         <a class="navbar-item" href="#/">
@@ -297,6 +341,61 @@ let Navbar = {
         return view
     },
     after_render: async () => { }
+
+}
+
+let NavbarUserActive = {
+    render: async () => {
+        let view =  `
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <a class="navbar-item" href="#/posts">
+                            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                        </a>
+                        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div id="navbarBasicExample" class="navbar-menu is-active" aria-expanded="false">
+                        <div class="navbar-start">
+                            <a class="navbar-item" href="#/posts">
+                                Home
+                            </a>
+                            <a class="navbar-item" href="#/about">
+                                About
+                            </a>
+                            <a class="navbar-item" href="#/secret">
+                                Secret
+                            </a>
+                        </div>
+                        <div class="navbar-end">
+                            <a class="navbar-item">
+                                ${activeUser}
+                            </a>
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <a class="button is-light" href="#/" id="logout_btn">
+                                        <strong>Log out</strong>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        `
+        return view
+    },
+    after_render: async () => {
+        document.getElementById("logout_btn").addEventListener ("click",  () => {
+            activeUser = "";
+            userActive = false;
+            updateNav();
+        })
+    }
 
 }
 
@@ -346,23 +445,21 @@ const Utils = {
 //app
 const routes={
 
-    '/'             : Home 
-    , '/about'      :About 
-    , '/p/:id'      :PostShow
-    , '/register'   :Register
-    , '/login'      :Login
-    , '/posts'      :PostsList
+    '/'                 :Home 
+    , '/about'          :About 
+    , '/p/:id'          :PostShow
+    , '/register'       :Register
+    , '/login'          :Login
+    , '/posts'          :PostsList
+    , '/e/:id'    :editShow
 };
 
 const router =async () =>{
 
-    
-    const header = null || document.getElementById('header_container');
     const content = null || document.getElementById('page_container');
     const footer = null || document.getElementById('footer_container');
-
-    header.innerHTML = await Navbar.render();
-    await Navbar.after_render();
+    
+    updateNav(userActive);
     footer.innerHTML = await Bottombar.render();
     await Bottombar.after_render();
 
