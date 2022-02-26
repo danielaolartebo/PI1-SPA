@@ -1,4 +1,4 @@
-***Single Page App***
+# ***Single Page App***
 
 *Single Page App in ye good olde JS (ES6)*
 
