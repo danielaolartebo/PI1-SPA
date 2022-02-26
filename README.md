@@ -1,6 +1,6 @@
-# ***REACT a1***
+#***Single Page App***
 
-*This app main objective is to add tasks*
+*Single Page App in ye good olde JS (ES6)*
 
 ## ***Built With*** 🛠️
 
@@ -31,7 +31,7 @@
 
 ## ***Sources***
 
-*The example used in the app was taken from this [website](https://raw.githubusercontent.com/reactjs/reactjs.org/main/static/html/single-file-example.html )*
+*Check [tutorial](https://dev.to/rishavs/making-a-single-page-app-in-ye-good-olde-js-es6-3eng) for extra help*
 
 ## ***Authors*** ✒️
 
